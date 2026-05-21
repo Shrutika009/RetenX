@@ -127,6 +127,29 @@ This converts predictive AI into actionable strategic AI.
 
 ---
 
+# Streamlit Deployment
+
+This project is ready to deploy on Streamlit Community Cloud.
+
+1. Push the repository to GitHub.
+2. Open Streamlit Community Cloud and choose **New app**.
+3. Select this repository and branch.
+4. Set the main file path to:
+
+```text
+app.py
+```
+
+5. Deploy the app. Streamlit will install dependencies from `requirements.txt`, use the Python version in `runtime.txt`, and load the checked-in model and data artifacts from `models/` and `data/`.
+
+To run locally:
+
+```bash
+streamlit run app.py
+```
+
+---
+
 # Project Structure
 
 RetainX/
