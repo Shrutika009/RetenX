@@ -7,6 +7,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+import streamlit.components.v1 as components
 
 
 BASE_DIR = Path(__file__).parent
@@ -24,25 +25,31 @@ RISK_COLORS = {
 
 def theme_colors() -> dict[str, str]:
     return {
-        "bg": "#f5f8fb",
-        "surface": "#fffdf9",
-        "soft": "#eaf1f7",
-        "text": "#17120f",
-        "muted": "#5f554d",
-        "border": "#d8e2ea",
-        "sidebar": "#f8fbfd",
-        "accent": "#426f98",
-        "accent_hover": "#315a80",
-        "accent_soft": "#dce8f3",
-        "table_header": "#f6f9fc",
-        "table_bg": "#fffdf9",
-        "table_alt": "#f3f7fb",
-        "table_text": "#111111",
-        "table_muted": "#6c6259",
-        "progress_track": "#dbe7f1",
-        "chart_text": "#3f3f3f",
-        "chart_grid": "#d7e1ea",
-        "shadow": "rgba(41,76,108,0.08)",
+        "bg": "#eff6ff",
+        "surface": "#ffffff",
+        "soft": "#eef6ff",
+        "text": "#12211d",
+        "muted": "#68736f",
+        "border": "#dbeafe",
+        "sidebar": "#fbfdff",
+        "accent": "#2563eb",
+        "accent_hover": "#1d4ed8",
+        "accent_soft": "#e8f1ff",
+        "mint": "#05b983",
+        "mint_soft": "#e4f8ef",
+        "gold": "#f0c84b",
+        "gold_soft": "#fff8da",
+        "rose": "#e9799a",
+        "rose_soft": "#fff0f5",
+        "table_header": "#f8fbff",
+        "table_bg": "#ffffff",
+        "table_alt": "#f5f9ff",
+        "table_text": "#12211d",
+        "table_muted": "#74807b",
+        "progress_track": "#dbeafe",
+        "chart_text": "#32413c",
+        "chart_grid": "#d7e7fb",
+        "shadow": "rgba(30,64,175,0.10)",
     }
 
 
@@ -81,18 +88,21 @@ def inject_theme() -> None:
         }}
 
         .stApp, [data-testid="stAppViewContainer"] {{
-            background: {colors["bg"]};
+            background:
+                radial-gradient(circle at 7% 8%, rgba(37, 99, 235, 0.13), transparent 28%),
+                radial-gradient(circle at 92% 2%, rgba(5, 185, 131, 0.13), transparent 30%),
+                linear-gradient(135deg, #f8fbff 0%, {colors["bg"]} 48%, #f4fbff 100%);
             color: {colors["text"]};
         }}
 
         .block-container {{
-            padding-top: 2rem;
+            padding-top: 1.45rem;
             padding-bottom: 3rem;
-            max-width: 1400px;
+            max-width: 1460px;
         }}
 
         [data-testid="stHeader"], [data-testid="stToolbar"], header {{
-            background: {colors["bg"]} !important;
+            background: transparent !important;
             color: {colors["text"]} !important;
         }}
 
@@ -125,8 +135,9 @@ def inject_theme() -> None:
         }}
 
         [data-testid="stSidebar"] {{
-            background: {colors["sidebar"]};
+            background: rgba(255, 254, 253, 0.92);
             border-right: 1px solid {colors["border"]};
+            box-shadow: 18px 0 45px rgba(15,46,110,0.06);
         }}
 
         [data-testid="stSidebar"] * {{
@@ -134,13 +145,19 @@ def inject_theme() -> None:
         }}
 
         [data-testid="stSidebar"] [role="radiogroup"] label {{
-            padding: 0.5rem 0.65rem;
-            border-radius: 4px;
-            margin-bottom: 0.15rem;
+            padding: 0.66rem 0.78rem;
+            border-radius: 12px;
+            margin-bottom: 0.26rem;
+            border: 1px solid transparent;
+            color: {colors["muted"]} !important;
+            font-weight: 700;
+            transition: all 160ms ease;
         }}
 
         [data-testid="stSidebar"] [role="radiogroup"] label:hover {{
             background: {colors["soft"]};
+            border-color: {colors["border"]};
+            transform: translateX(2px);
         }}
 
         [data-testid="stSidebar"] hr {{
@@ -149,10 +166,17 @@ def inject_theme() -> None:
 
         .sidebar-brand {{
             font-family: "Raleway", Arial, sans-serif;
-            font-size: 1.65rem;
+            font-size: 1.8rem;
             line-height: 1.1;
-            font-weight: 800;
-            margin: 0 0 0.7rem 0;
+            font-weight: 900;
+            margin: 0.25rem 0 0.45rem 0;
+            display: flex;
+            align-items: center;
+            letter-spacing: -0.02em;
+        }}
+
+        .sidebar-brand:before {{
+            display: none;
         }}
 
         [role="radio"][aria-checked="true"] div:first-child {{
@@ -160,14 +184,38 @@ def inject_theme() -> None:
             border-color: {colors["accent"]} !important;
         }}
 
+        [data-testid="stSidebar"] label:has([role="radio"][aria-checked="true"]) {{
+            background: linear-gradient(135deg, {colors["accent_soft"]}, #f7fbf5);
+            border-color: rgba(37,99,235,0.24);
+            color: {colors["accent"]} !important;
+            box-shadow: inset 4px 0 0 {colors["accent"]};
+        }}
+
         .hero {{
-            padding: 0.7rem 0 1.1rem 0;
+            position: relative;
+            padding: 1.35rem 1.45rem 1.55rem 1.45rem;
+            margin-bottom: 1.1rem;
+            border: 1px solid rgba(235,232,242,0.86);
+            border-radius: 24px;
+            background:
+                linear-gradient(135deg, rgba(255,255,255,0.94), rgba(255,255,255,0.78)),
+                linear-gradient(135deg, rgba(37,99,235,0.10), rgba(5,185,131,0.09));
+            box-shadow: 0 24px 65px {colors["shadow"]};
+            overflow: hidden;
+        }}
+
+        .hero:after {{
+            display: none;
+        }}
+
+        .hero:before {{
+            display: none;
         }}
 
         .eyebrow {{
             color: {colors["accent"]};
-            font-size: 1.35rem;
-            font-weight: 700;
+            font-size: 1.12rem;
+            font-weight: 900;
             letter-spacing: 0.06em;
             text-transform: uppercase;
             margin-bottom: 0.5rem;
@@ -179,16 +227,17 @@ def inject_theme() -> None:
 
         .hero h1 {{
             color: {colors["text"]};
-            font-size: clamp(2rem, 3vw, 3rem);
+            font-size: clamp(2rem, 3vw, 3.05rem);
             line-height: 1.12;
             letter-spacing: 0;
             margin: 0;
-            font-weight: 800;
+            font-weight: 900;
+            max-width: 980px;
         }}
 
         .hero p {{
             color: {colors["muted"]};
-            max-width: 760px;
+            max-width: 820px;
             font-size: 1.05rem;
             margin-top: 0.65rem;
         }}
@@ -199,78 +248,164 @@ def inject_theme() -> None:
         }}
 
         div[data-testid="stForm"] {{
-            background: {colors["surface"]};
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.91)),
+                linear-gradient(135deg, rgba(37,99,235,0.12), rgba(5,185,131,0.08));
             border: 1px solid {colors["border"]};
-            border-radius: 10px;
-            padding: 1rem 1rem 1.25rem 1rem;
-            box-shadow: 0 12px 30px {colors["shadow"]};
+            border-radius: 24px;
+            padding: 1.2rem 1.2rem 1.35rem 1.2rem;
+            box-shadow: 0 24px 65px {colors["shadow"]};
         }}
 
         .form-title {{
             color: {colors["text"]};
-            font-size: 1.05rem;
-            font-weight: 800;
+            font-size: 1.18rem;
+            font-weight: 900;
             margin: 0 0 1.1rem 0;
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+        }}
+
+        .form-title:before {{
+            display: none;
+        }}
+
+        .required-label {{
+            color: {colors["text"]};
+            font-size: 0.9rem;
+            font-weight: 800;
+            margin: 0.2rem 0 0.35rem 0;
+        }}
+
+        .required-label .required-star {{
+            color: #d93025;
+            font-weight: 900;
+            margin-left: 0.18rem;
+        }}
+
+        .field-error {{
+            color: #d93025;
+            font-size: 0.78rem;
+            font-weight: 700;
+            margin: -0.38rem 0 0.66rem 0;
         }}
 
         .metric-card, .panel {{
-            background: {colors["surface"]};
+            background: rgba(255,255,255,0.92);
             border: 1px solid {colors["border"]};
-            border-radius: 8px;
-            padding: 1rem 1.05rem;
-            min-height: 110px;
-            box-shadow: 0 10px 28px {colors["shadow"]};
+            border-radius: 18px;
+            padding: 1.05rem 1.12rem;
+            min-height: 118px;
+            box-shadow: 0 18px 45px {colors["shadow"]};
         }}
 
         .metric-card {{
-            border-top: 3px solid {colors["accent"]};
+            position: relative;
+            overflow: hidden;
+            border-top: 0;
+            transition: transform 160ms ease, box-shadow 160ms ease;
+        }}
+
+        .metric-card:hover {{
+            transform: translateY(-2px);
+            box-shadow: 0 24px 58px rgba(15,46,110,0.14);
+        }}
+
+        .metric-card:before {{
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(37,99,235,0.10), transparent 42%),
+                        linear-gradient(315deg, rgba(5,185,131,0.10), transparent 38%);
+            pointer-events: none;
+        }}
+
+        .metric-card:after {{
+            content: "";
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, {colors["accent"]}, {colors["mint"]});
+            opacity: 0.92;
+            box-shadow: 0 16px 30px rgba(37,99,235,0.20);
         }}
 
         .metric-label {{
             color: {colors["muted"]};
-            font-size: 0.8rem;
-            font-weight: 700;
+            font-size: 0.76rem;
+            font-weight: 900;
             letter-spacing: 0.04em;
             text-transform: uppercase;
             margin-bottom: 0.45rem;
+            position: relative;
+            z-index: 1;
         }}
 
         .metric-value {{
             color: {colors["text"]};
-            font-size: 1.75rem;
+            font-size: 1.78rem;
             line-height: 1.1;
-            font-weight: 800;
+            font-weight: 900;
+            letter-spacing: -0.01em;
+            max-width: calc(100% - 50px);
+            position: relative;
+            z-index: 1;
         }}
 
         .metric-sub {{
             color: {colors["muted"]};
             font-size: 0.86rem;
             margin-top: 0.45rem;
+            position: relative;
+            z-index: 1;
         }}
 
         .risk-pill {{
             display: inline-flex;
             align-items: center;
-            padding: 0.38rem 0.65rem;
-            border-radius: 4px;
+            padding: 0.42rem 0.72rem;
+            border-radius: 999px;
             color: white;
             font-size: 0.86rem;
-            font-weight: 800;
+            font-weight: 900;
+            box-shadow: 0 10px 24px rgba(15,46,110,0.15);
         }}
 
         .section-title {{
             color: {colors["text"]};
             font-size: 1.08rem;
-            font-weight: 800;
-            margin: 0.3rem 0 0.8rem 0;
+            font-weight: 900;
+            margin: 0.45rem 0 0.85rem 0;
+            letter-spacing: -0.01em;
+        }}
+
+        [data-testid="stPlotlyChart"] {{
+            background: rgba(255,255,255,0.90);
+            border: 1px solid {colors["border"]};
+            border-radius: 20px;
+            padding: 0.4rem;
+            box-shadow: 0 18px 45px {colors["shadow"]};
+        }}
+
+        [data-testid="stImage"] {{
+            background: rgba(255,255,255,0.9);
+            border: 1px solid {colors["border"]};
+            border-radius: 20px;
+            padding: 0.75rem;
+            box-shadow: 0 18px 45px {colors["shadow"]};
         }}
 
         div[data-testid="stDataFrame"] {{
             border: 1px solid {colors["border"]};
-            border-radius: 0;
+            border-radius: 18px;
             overflow: hidden;
             background: {colors["table_bg"]};
             color: {colors["table_text"]};
+            box-shadow: 0 18px 45px {colors["shadow"]};
         }}
 
         div[data-testid="stDataFrame"] * {{
@@ -279,8 +414,8 @@ def inject_theme() -> None:
 
         label, .stSelectbox label, .stNumberInput label, .stMultiSelect label {{
             color: {colors["text"]} !important;
-            font-size: 1rem !important;
-            font-weight: 700 !important;
+            font-size: 0.9rem !important;
+            font-weight: 800 !important;
             font-family: "Raleway", Arial, sans-serif !important;
         }}
 
@@ -288,8 +423,15 @@ def inject_theme() -> None:
             background: {colors["surface"]} !important;
             border-color: {colors["border"]} !important;
             color: {colors["text"]} !important;
-            border-radius: 7px !important;
+            border-radius: 12px !important;
             font-family: "Raleway", Arial, sans-serif !important;
+            box-shadow: 0 10px 26px rgba(15,46,110,0.04) !important;
+        }}
+
+        input:focus, textarea:focus, [data-baseweb="select"] > div:focus-within,
+        [data-baseweb="input"] > div:focus-within {{
+            border-color: {colors["accent"]} !important;
+            box-shadow: 0 0 0 4px rgba(37,99,235,0.11) !important;
         }}
 
         input::placeholder {{
@@ -307,18 +449,20 @@ def inject_theme() -> None:
         }}
 
         .stButton > button, .stFormSubmitButton > button {{
-            background: {colors["accent"]};
+            background: linear-gradient(135deg, {colors["accent"]}, {colors["accent_hover"]});
             color: white;
             border: 1px solid {colors["accent"]};
             border-radius: 999px;
-            font-weight: 800;
-            padding: 0.58rem 1rem;
+            font-weight: 900;
+            padding: 0.65rem 1.15rem;
+            box-shadow: 0 15px 28px rgba(37,99,235,0.24);
         }}
 
         .stButton > button:hover, .stFormSubmitButton > button:hover {{
-            background: {colors["accent_hover"]};
+            background: linear-gradient(135deg, {colors["accent_hover"]}, #153eaa);
             border-color: {colors["accent_hover"]};
             color: white;
+            transform: translateY(-1px);
         }}
 
         [data-testid="stNumberInput"] button {{
@@ -337,7 +481,7 @@ def inject_theme() -> None:
         [data-baseweb="tag"] {{
             background: {colors["accent"]} !important;
             color: white !important;
-            border-radius: 4px !important;
+            border-radius: 999px !important;
             font-family: "Raleway", Arial, sans-serif !important;
         }}
 
@@ -349,10 +493,12 @@ def inject_theme() -> None:
             border: 1px solid {colors["border"]};
             background: {colors["table_bg"]};
             width: 100%;
-            overflow: visible;
+            overflow: hidden;
             line-height: 0;
             margin: 0;
             display: flex;
+            border-radius: 18px;
+            box-shadow: 0 18px 45px {colors["shadow"]};
         }}
 
         .light-table {{
@@ -373,17 +519,20 @@ def inject_theme() -> None:
             background: {colors["table_header"]};
             color: {colors["table_muted"]};
             border-bottom: 1px solid {colors["border"]};
-            border-right: 1px solid {colors["border"]};
-            padding: 0.4rem 0.45rem;
+            border-right: 0;
+            padding: 0.72rem 0.62rem;
             text-align: left;
             white-space: normal;
-            font-weight: 700;
+            font-weight: 900;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }}
 
         .light-table td {{
             border-bottom: 1px solid {colors["border"]};
-            border-right: 1px solid {colors["border"]};
-            padding: 0.34rem 0.45rem;
+            border-right: 0;
+            padding: 0.64rem 0.62rem;
             white-space: normal;
             overflow-wrap: break-word;
             vertical-align: top;
@@ -391,6 +540,15 @@ def inject_theme() -> None:
 
         .light-table tr:nth-child(even) td {{
             background: {colors["table_alt"]};
+        }}
+
+        .light-table tbody tr:hover td {{
+            background: {colors["accent_soft"]};
+        }}
+
+        .light-table td.col-risk-tier {{
+            color: {colors["accent"]};
+            font-weight: 900;
         }}
 
         .light-table tbody tr:last-child td {{
@@ -442,6 +600,26 @@ def inject_theme() -> None:
             padding-top: 0.75rem;
             padding-bottom: 0.75rem;
             line-height: 1.4;
+        }}
+
+        @media (max-width: 900px) {{
+            .block-container {{
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }}
+
+            .hero {{
+                padding: 1.15rem;
+                border-radius: 18px;
+            }}
+
+            .hero:before, .hero:after {{
+                display: none;
+            }}
+
+            .metric-card, .panel {{
+                border-radius: 16px;
+            }}
         }}
         </style>
         """,
@@ -665,16 +843,132 @@ def parse_number(value: str | None, label: str, errors: list[str], *, integer: b
     return number
 
 
+def field_label(label: str, required: bool = True) -> None:
+    star = '<span class="required-star">*</span>' if required else ""
+    st.markdown(f'<div class="required-label">{escape(label)}{star}</div>', unsafe_allow_html=True)
+
+
+def field_error(field_errors: dict[str, str], key: str) -> None:
+    if key in field_errors:
+        st.markdown(f'<div class="field-error">{escape(field_errors[key])}</div>', unsafe_allow_html=True)
+
+
+def required_text_input(label: str, key: str, placeholder: str, field_errors: dict[str, str]) -> str:
+    field_label(label)
+    value = st.text_input(label, key=key, placeholder=placeholder, label_visibility="collapsed")
+    field_error(field_errors, key)
+    return value
+
+
+def required_selectbox(label: str, key: str, options: list, placeholder: str, field_errors: dict[str, str]):
+    field_label(label)
+    value = st.selectbox(label, options, index=None, key=key, placeholder=placeholder, label_visibility="collapsed")
+    field_error(field_errors, key)
+    return value
+
+
+def parse_required_float(
+    value: str | None,
+    label: str,
+    key: str,
+    field_errors: dict[str, str],
+    *,
+    minimum: float | None = None,
+) -> float | None:
+    if value is None or not str(value).strip():
+        field_errors[key] = "Required"
+        return None
+    try:
+        number = float(str(value).replace(",", "").strip())
+    except ValueError:
+        field_errors[key] = "Enter a valid number"
+        return None
+    if minimum is not None and number < minimum:
+        field_errors[key] = f"Must be at least {minimum:g}"
+        return None
+    return number
+
+
+def parse_input_float(value: str | None, default: float = 0.0, *, minimum: float | None = None) -> tuple[float, str | None]:
+    if value is None or not str(value).strip():
+        return default, None
+    try:
+        number = float(str(value).replace(",", "").strip())
+    except ValueError:
+        return default, "Enter a valid number"
+    if minimum is not None and number < minimum:
+        return default, f"Must be at least {minimum:g}"
+    return number, None
+
+
+def add_enter_to_next_field_script() -> None:
+    components.html(
+        """
+        <script>
+        (() => {
+          const doc = window.parent.document;
+          if (doc.body.dataset.retainxEnterNextReady === "true") return;
+          doc.body.dataset.retainxEnterNextReady = "true";
+
+          const isVisible = (field) => {
+            const rect = field.getBoundingClientRect();
+            return rect.width > 0 && rect.height > 0 && field.offsetParent !== null;
+          };
+
+          const formFields = () => {
+            const fields = Array.from(doc.querySelectorAll(
+              'input:not([type="hidden"]):not([disabled]), textarea:not([disabled])'
+            )).filter(isVisible);
+
+            return fields.sort((a, b) => {
+              const ar = a.getBoundingClientRect();
+              const br = b.getBoundingClientRect();
+              const aLeftColumn = ar.left < window.parent.innerWidth / 2 ? 0 : 1;
+              const bLeftColumn = br.left < window.parent.innerWidth / 2 ? 0 : 1;
+              if (aLeftColumn !== bLeftColumn) return aLeftColumn - bLeftColumn;
+              if (Math.abs(ar.top - br.top) > 8) return ar.top - br.top;
+              return ar.left - br.left;
+            });
+          };
+
+          doc.addEventListener("keydown", (event) => {
+            if (event.key !== "Enter" || event.shiftKey || event.isComposing) return;
+            const active = doc.activeElement;
+            if (!active || active.tagName.toLowerCase() === "textarea") return;
+            if (!active.matches('input:not([type="hidden"]):not([disabled])')) return;
+
+            const fields = formFields();
+            const currentIndex = fields.indexOf(active);
+            if (currentIndex === -1) return;
+
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+
+            const next = fields[currentIndex + 1];
+            if (next) {
+              next.focus();
+              if (typeof next.select === "function") next.select();
+            }
+          }, true);
+        })();
+        </script>
+        """,
+        height=0,
+    )
+
+
 def gender_for_model(gender: str) -> str:
     return {"Male": "M", "Female": "F", "Other": "Unknown"}[gender]
 
 
 def page_header(label: str, title: str, subtitle: str) -> None:
     subtitle_html = f"<p>{subtitle}</p>" if subtitle else ""
+    label_html = f'<div class="eyebrow">{label}</div>' if label else ""
     st.markdown(
         f"""
         <div class="hero">
-          <div class="eyebrow">{label}</div>
+          {label_html}
           <h1>{title}</h1>
           {subtitle_html}
         </div>
@@ -698,7 +992,7 @@ def metric_card(label: str, value: str, sub: str = "") -> None:
 
 COLUMN_LABELS = {
     "customer_id": "Customer ID",
-    "geography": "Country",
+    "geography": "Region",
     "age": "Age",
     "churn_probability": "Churn Probability",
     "risk_tier": "Risk Tier",
@@ -765,7 +1059,7 @@ def model_input_summary(feature_row: pd.DataFrame) -> pd.DataFrame:
     labels = {
         "age": "Age",
         "gender": "Gender",
-        "geography": "Country",
+        "geography": "Region",
         "num_products": "Number of Products",
         "is_active_member": "Active Member",
         "credit_score": "Credit Score",
@@ -820,21 +1114,30 @@ def executive_overview(df: pd.DataFrame) -> None:
         "A live business view of churn risk, revenue exposure, recoverable value, and where retention teams should focus first.",
     )
 
-    high_risk = df["risk_tier"].isin(["High Risk", "Critical"]).sum()
+    tier_options = ["Critical", "High Risk", "Medium Risk"]
+    selected_tiers = st.multiselect(
+        "Risk Segment",
+        tier_options,
+        default=["Critical", "High Risk", "Medium Risk"],
+        help="Filter the overview charts and top customer queue by risk tier.",
+    )
+    chart_df = df[df["risk_tier"].isin(selected_tiers)] if selected_tiers else df
+
+    high_risk = chart_df["risk_tier"].isin(["High Risk", "Critical"]).sum()
     cols = st.columns(4)
     with cols[0]:
-        metric_card("Total Customers", f"{len(df):,}", "Scored from processed customer data")
+        metric_card("Total Customers", f"{len(chart_df):,}", "Customers in selected risk segment")
     with cols[1]:
         metric_card("High Risk Customers", f"{high_risk:,}", "High Risk + Critical customers")
     with cols[2]:
-        metric_card("Revenue At Risk", money(df["revenue_at_risk"].sum()), "Estimated exposed relationship value")
+        metric_card("Revenue At Risk", money(chart_df["revenue_at_risk"].sum()), "Estimated exposed relationship value")
     with cols[3]:
-        metric_card("Recoverable Revenue", money(df["recoverable_revenue"].sum()), "Modeled recoverable opportunity")
+        metric_card("Recoverable Revenue", money(chart_df["recoverable_revenue"].sum()), "Modeled recoverable opportunity")
 
     st.divider()
 
     left, right = st.columns([1.05, 0.95])
-    risk_counts = df["risk_tier"].value_counts().reindex(RISK_COLORS.keys()).fillna(0).reset_index()
+    risk_counts = chart_df["risk_tier"].value_counts().reindex(RISK_COLORS.keys()).fillna(0).reset_index()
     risk_counts.columns = ["risk_tier", "customers"]
 
     with left:
@@ -848,11 +1151,12 @@ def executive_overview(df: pd.DataFrame) -> None:
             color_discrete_map=RISK_COLORS,
         )
         fig.update_traces(textposition="inside", textinfo="percent+label")
+        fig.update_layout(height=430, margin=dict(l=16, r=16, t=38, b=18))
         st.plotly_chart(style_plot(fig), use_container_width=True)
 
     with right:
-        st.markdown('<div class="section-title">Average Churn Probability by Geography</div>', unsafe_allow_html=True)
-        geo = df.groupby("geography", as_index=False)["churn_probability"].mean().sort_values("churn_probability", ascending=False)
+        st.markdown('<div class="section-title">Average Churn Probability by Region</div>', unsafe_allow_html=True)
+        geo = chart_df.groupby("geography", as_index=False)["churn_probability"].mean().sort_values("churn_probability", ascending=False)
         fig = px.bar(
             geo,
             x="geography",
@@ -861,10 +1165,11 @@ def executive_overview(df: pd.DataFrame) -> None:
             color_continuous_scale=["#d9e6e1", "#1b8a8f", "#17324d"],
         )
         fig.update_yaxes(tickformat=".0%")
+        fig.update_layout(height=430)
         st.plotly_chart(style_plot(fig), use_container_width=True)
 
     st.markdown('<div class="section-title">Top Customers To Save</div>', unsafe_allow_html=True)
-    show = df.sort_values("priority_score", ascending=False)[
+    show = chart_df.sort_values("priority_score", ascending=False)[
         [
             "customer_id",
             "churn_probability",
@@ -891,7 +1196,7 @@ def customer_intelligence(df: pd.DataFrame) -> None:
     page_header(
         "Customer Intelligence",
         "Prioritize customers before churn becomes revenue loss",
-        "Filter by risk tier, impact, and geography to inspect model-backed retention actions customer by customer.",
+        "Filter by risk tier, impact, and region to inspect model-backed retention actions customer by customer.",
     )
 
     filters = st.columns([1, 1, 1])
@@ -900,7 +1205,7 @@ def customer_intelligence(df: pd.DataFrame) -> None:
     with filters[1]:
         impact = st.selectbox("Expected Impact", ["All"] + sorted(df["expected_impact"].dropna().unique().tolist()), index=0)
     with filters[2]:
-        geography = st.selectbox("Geography", ["All"] + sorted(df["geography"].dropna().unique().tolist()), index=0)
+        geography = st.selectbox("Region", ["All"] + sorted(df["geography"].dropna().unique().tolist()), index=0)
 
     view = df.copy()
     if tier != "All":
@@ -948,77 +1253,81 @@ def customer_intelligence(df: pd.DataFrame) -> None:
 
 
 def prediction_engine(df: pd.DataFrame) -> None:
+    add_enter_to_next_field_script()
     page_header(
-        "",
-        "Enter User Information in the Form Below",
-        "",
+        "AI Prediction Engine",
+        "Predict churn risk for a single customer",
+        "Enter a customer's profile and RetainX will score churn probability, revenue exposure, and the next best retention action.",
     )
 
     artifacts = load_artifacts()
     geography_options = sorted(df["geography"].dropna().unique().tolist())
     gender_options = ["Male", "Female", "Other"]
+    field_errors = st.session_state.get("prediction_field_errors", {})
 
     st.markdown('<div class="form-shell">', unsafe_allow_html=True)
     with st.form("prediction_form"):
         st.markdown('<div class="form-title">Customer Information</div>', unsafe_allow_html=True)
         left, right = st.columns(2)
         with left:
-            credit_score = st.text_input("Credit Score", placeholder="Enter credit score")
-            geography = st.selectbox("Country", geography_options, index=None, placeholder="Select country")
-            gender = st.selectbox("Gender", gender_options, index=None, placeholder="Select gender")
-            age = st.text_input("Age", placeholder="Enter age")
-            tenure_years = st.text_input("Years as Bank Customer", placeholder="Enter years")
-            account_balance = st.text_input("Account Balance", placeholder="Enter balance")
-            num_transactions_6m = st.text_input("Transactions in Last 6 Months", placeholder="Enter transactions")
-            avg_transaction_amount = st.text_input("Average Transaction Amount", placeholder="Enter amount")
-            num_complaints = st.text_input("Complaints", placeholder="Enter complaints")
+            credit_score = required_text_input("Credit Score", "credit_score", "Enter credit score", field_errors)
+            geography = required_selectbox("Region", "geography", geography_options, "Select region", field_errors)
+            gender = required_selectbox("Gender", "gender", gender_options, "Select gender", field_errors)
+            age = required_text_input("Age", "age", "Enter age", field_errors)
+            tenure_years = required_text_input("Years as Bank Customer", "tenure_years", "Enter years", field_errors)
+            account_balance = required_text_input("Account Balance", "account_balance", "Enter balance", field_errors)
+            num_transactions_6m = required_text_input("Transactions in Last 6 Months", "num_transactions_6m", "Enter transactions", field_errors)
+            avg_transaction_amount = required_text_input("Average Transaction Amount", "avg_transaction_amount", "Enter amount", field_errors)
+            num_complaints = required_text_input("Complaints", "num_complaints", "Enter complaints", field_errors)
         with right:
-            num_products = st.selectbox("Number of Products Used", [1, 2, 3, 4], index=None, placeholder="Select products")
-            has_credit_card = st.selectbox("Has an Active Credit Card", ["Yes", "No"], index=None, placeholder="Select option")
-            is_active_member = st.selectbox("Is an Active Bank Member", ["Yes", "No"], index=None, placeholder="Select option")
-            estimated_salary = st.text_input("Estimated Salary", placeholder="Enter salary")
-            has_loan = st.selectbox("Has Loan", ["Yes", "No"], index=None, placeholder="Select option")
-            loan_default_history = st.selectbox("Loan Default History", ["No", "Yes"], index=None, placeholder="Select option")
-            last_interaction_days_ago = st.text_input("Days Since Last Interaction", placeholder="Enter days")
-            mobile_app_logins_monthly = st.text_input("Monthly Mobile App Logins", placeholder="Enter logins")
-            net_banking_active = st.selectbox("Net Banking Active", ["Yes", "No"], index=None, placeholder="Select option")
-            branch_visits_year = st.text_input("Branch Visits Per Year", placeholder="Enter visits")
+            num_products = required_text_input("Number of Products Used", "num_products", "Enter products", field_errors)
+            has_credit_card = required_selectbox("Has an Active Credit Card", "has_credit_card", ["Yes", "No"], "Select option", field_errors)
+            is_active_member = required_selectbox("Is an Active Bank Member", "is_active_member", ["Yes", "No"], "Select option", field_errors)
+            estimated_salary = required_text_input("Estimated Salary", "estimated_salary", "Enter salary", field_errors)
+            has_loan = required_selectbox("Has Loan", "has_loan", ["Yes", "No"], "Select option", field_errors)
+            loan_default_history = required_selectbox("Loan Default History", "loan_default_history", ["No", "Yes"], "Select option", field_errors)
+            last_interaction_days_ago = required_text_input("Days Since Last Interaction", "last_interaction_days_ago", "Enter days", field_errors)
+            mobile_app_logins_monthly = required_text_input("Monthly Mobile App Logins", "mobile_app_logins_monthly", "Enter logins", field_errors)
+            net_banking_active = required_selectbox("Net Banking Active", "net_banking_active", ["Yes", "No"], "Select option", field_errors)
+            branch_visits_year = required_text_input("Branch Visits Per Year", "branch_visits_year", "Enter visits", field_errors)
 
         submitted = st.form_submit_button("Submit")
     st.markdown("</div>", unsafe_allow_html=True)
 
     if submitted:
-        errors = []
-        parsed_credit_score = parse_number(credit_score, "Credit Score", errors, integer=True, minimum=0)
-        parsed_age = parse_number(age, "Age", errors, integer=True, minimum=0)
-        parsed_tenure_years = parse_number(tenure_years, "Years as Bank Customer", errors, integer=True, minimum=0)
-        parsed_account_balance = parse_number(account_balance, "Account Balance", errors, minimum=0)
-        parsed_num_transactions_6m = parse_number(num_transactions_6m, "Transactions in Last 6 Months", errors, integer=True, minimum=0)
-        parsed_avg_transaction_amount = parse_number(avg_transaction_amount, "Average Transaction Amount", errors, minimum=0)
-        parsed_num_complaints = parse_number(num_complaints, "Complaints", errors, integer=True, minimum=0)
-        parsed_estimated_salary = parse_number(estimated_salary, "Estimated Salary", errors, minimum=0)
-        parsed_last_interaction_days_ago = parse_number(last_interaction_days_ago, "Days Since Last Interaction", errors, integer=True, minimum=0)
-        parsed_mobile_app_logins_monthly = parse_number(mobile_app_logins_monthly, "Monthly Mobile App Logins", errors, integer=True, minimum=0)
-        parsed_branch_visits_year = parse_number(branch_visits_year, "Branch Visits Per Year", errors, integer=True, minimum=0)
+        form_errors = {}
+        parsed_credit_score = parse_required_float(credit_score, "Credit Score", "credit_score", form_errors, minimum=0)
+        parsed_age = parse_required_float(age, "Age", "age", form_errors, minimum=0)
+        parsed_tenure_years = parse_required_float(tenure_years, "Years as Bank Customer", "tenure_years", form_errors, minimum=0)
+        parsed_account_balance = parse_required_float(account_balance, "Account Balance", "account_balance", form_errors, minimum=0)
+        parsed_num_transactions_6m = parse_required_float(num_transactions_6m, "Transactions in Last 6 Months", "num_transactions_6m", form_errors, minimum=0)
+        parsed_avg_transaction_amount = parse_required_float(avg_transaction_amount, "Average Transaction Amount", "avg_transaction_amount", form_errors, minimum=0)
+        parsed_num_complaints = parse_required_float(num_complaints, "Complaints", "num_complaints", form_errors, minimum=0)
+        parsed_num_products = parse_required_float(num_products, "Number of Products Used", "num_products", form_errors, minimum=0)
+        parsed_estimated_salary = parse_required_float(estimated_salary, "Estimated Salary", "estimated_salary", form_errors, minimum=0)
+        parsed_last_interaction_days_ago = parse_required_float(last_interaction_days_ago, "Days Since Last Interaction", "last_interaction_days_ago", form_errors, minimum=0)
+        parsed_mobile_app_logins_monthly = parse_required_float(mobile_app_logins_monthly, "Monthly Mobile App Logins", "mobile_app_logins_monthly", form_errors, minimum=0)
+        parsed_branch_visits_year = parse_required_float(branch_visits_year, "Branch Visits Per Year", "branch_visits_year", form_errors, minimum=0)
 
         required_choices = {
-            "Country": geography,
-            "Gender": gender,
-            "Number of Products Used": num_products,
-            "Has an Active Credit Card": has_credit_card,
-            "Is an Active Bank Member": is_active_member,
-            "Has Loan": has_loan,
-            "Loan Default History": loan_default_history,
-            "Net Banking Active": net_banking_active,
+            "geography": geography,
+            "gender": gender,
+            "has_credit_card": has_credit_card,
+            "is_active_member": is_active_member,
+            "has_loan": has_loan,
+            "loan_default_history": loan_default_history,
+            "net_banking_active": net_banking_active,
         }
-        missing = [label for label, value in required_choices.items() if value is None]
-        if missing:
-            errors.append("Select: " + ", ".join(missing) + ".")
+        for key, value in required_choices.items():
+            if value is None:
+                form_errors[key] = "Required"
         if parsed_age is not None and parsed_tenure_years is not None and parsed_tenure_years > parsed_age:
-            errors.append("Years as Bank Customer cannot be greater than Age.")
-        if errors:
-            st.warning("Please fix the form before submitting:\n\n" + "\n".join(f"- {error}" for error in errors))
+            form_errors["tenure_years"] = "Cannot be greater than age"
+        if form_errors:
+            st.session_state["prediction_field_errors"] = form_errors
+            st.rerun()
             return
+        st.session_state["prediction_field_errors"] = {}
 
         inputs = {
             "credit_score": parsed_credit_score,
@@ -1027,7 +1336,7 @@ def prediction_engine(df: pd.DataFrame) -> None:
             "age": parsed_age,
             "tenure_years": parsed_tenure_years,
             "account_balance": parsed_account_balance,
-            "num_products": num_products,
+            "num_products": parsed_num_products,
             "has_credit_card": int(has_credit_card == "Yes"),
             "is_active_member": int(is_active_member == "Yes"),
             "estimated_salary": parsed_estimated_salary,
@@ -1155,6 +1464,7 @@ def explainability(df: pd.DataFrame) -> None:
 
 
 def simulator(df: pd.DataFrame) -> None:
+    add_enter_to_next_field_script()
     page_header(
         "What-If Strategy Simulator",
         "Estimate retention campaign impact before spending",
@@ -1163,15 +1473,37 @@ def simulator(df: pd.DataFrame) -> None:
 
     current_churn = float(df["churn_probability"].mean())
     revenue_at_risk = float(df["revenue_at_risk"].sum())
-    campaign_strength = st.number_input("Retention Campaign Strength (%)", min_value=0, max_value=100, value=None, step=1)
-    budget = st.number_input("Retention Budget ($)", min_value=0, value=None, step=5000)
+    sim_errors = {}
+    field_label("Retention Campaign Strength (%)")
+    campaign_strength = st.text_input(
+        "Retention Campaign Strength (%)",
+        key="campaign_strength",
+        placeholder="Enter campaign strength",
+        label_visibility="collapsed",
+    )
+    campaign_strength_value, strength_error = parse_input_float(campaign_strength, minimum=0)
+    if strength_error:
+        sim_errors["campaign_strength"] = strength_error
+        field_error(sim_errors, "campaign_strength")
+    campaign_strength_value = min(campaign_strength_value, 100)
+    field_label("Retention Budget ($)")
+    budget = st.text_input(
+        "Retention Budget ($)",
+        key="retention_budget",
+        placeholder="Enter budget",
+        label_visibility="collapsed",
+    )
+    budget_value, budget_error = parse_input_float(budget, minimum=0)
+    if budget_error:
+        sim_errors["retention_budget"] = budget_error
+        field_error(sim_errors, "retention_budget")
+    field_label("Target Risk Tiers")
     target_tiers = st.multiselect(
         "Target Risk Tiers",
         list(RISK_COLORS.keys()),
+        label_visibility="collapsed",
     )
 
-    campaign_strength_value = float(campaign_strength or 0)
-    budget_value = float(budget or 0)
     target_df = df[df["risk_tier"].isin(target_tiers)] if target_tiers else df.iloc[0:0]
     effectiveness = min(0.55, campaign_strength_value / 100 * 0.32 + min(budget_value / max(revenue_at_risk, 1), 0.18))
     projected_churn = max(0, current_churn - (target_df["churn_probability"].mean() if len(target_df) else 0) * effectiveness * 0.35)
@@ -1233,6 +1565,7 @@ def main() -> None:
         )
 
     inject_theme()
+    add_enter_to_next_field_script()
 
     if page == "AI Prediction Engine":
         prediction_engine(df)
